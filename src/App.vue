@@ -1,12 +1,34 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <nav-bar/>
+      <alert v-if="isError"/>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import NavBar from './components/NavBar.vue'
+import Alert from './components/Alert.vue'
+import { mapState } from 'vuex'
+
+export default {
+  name:'App',
+  components: {
+    NavBar,
+    Alert
+  },
+
+  computed: mapState([
+    'isLogin',
+    'isError',
+
+  ])
+  
+}
+</script>
+
 
 <style>
 #app {
