@@ -112,7 +112,14 @@ export default new Vuex.Store({
     },
 
     saveTodo(context, data) {
-      let validateDate = new Date(data.duedate) > new Date()
+      let date = new Date().getDate()
+      if (date < 10) date = `0${date}`
+      let month = new Date().getMonth()
+      if (month+1 < 10) month = `0${month+1}`
+      let year = new Date().getFullYear()
+      
+      let today = `${year}-${month}-${date}`
+      let validateDate = new Date(data.duedate) >= new Date(today)
       if (data.description && validateDate && data.priority){
         APIUrl.post('tasks',{
           priority: data.priority,

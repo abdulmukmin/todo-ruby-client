@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="d-flex justify-content-between navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" >Todo</a>
     <div v-if="!isLogin" class="btn-group" role="group">
       <button type="button" class="btn btn-info" v-on:click="this.signup">Sign Up</button>

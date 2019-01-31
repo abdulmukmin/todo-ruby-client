@@ -72,7 +72,6 @@ export default {
     },
 
     cancel() {
-      console.log(`masukkkk cancel`)
       router.push({part: '/'})
     },
 
