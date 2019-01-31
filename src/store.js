@@ -85,6 +85,7 @@ export default new Vuex.Store({
         })
         .then( response => {
           context.commit('doSignIn', response.data.auth_token)
+          context.commit('showSuccess', 'Login success..')
           router.push({path: '/'})
         })
         .catch( error => {
@@ -107,7 +108,7 @@ export default new Vuex.Store({
 
     successFound(context, data) {
       context.commit('resetAlert')
-      context.commit('showSuccessMessage', data)
+      context.commit('showSuccess', data)
     },
 
     saveTodo(context, data) {
@@ -121,7 +122,7 @@ export default new Vuex.Store({
           headers:{Authorization: localStorage.getItem('acc-tkn')}
         })
         .then( response => {
-          context.commit('showSuccessMessage', "Success save data!")
+          context.commit('showSuccess', "Success save data!")
           router.push({path: '/'})
         })
         .catch( error => {

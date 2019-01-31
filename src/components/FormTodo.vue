@@ -64,7 +64,6 @@ export default {
     ]),
 
     save() {
-      console.log(`masuk save`)
       this.saveTodo({
         description: this.description,
         duedate: this.duedate,
