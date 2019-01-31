@@ -27,7 +27,7 @@
     <div class="d-flex justify-content-around">
       <div class="form-group row">
         <button type="button" class="btn btn-primary" @click="save">Save</button>
-        <button type="button" class="btn btn-secondary ml-2">Cancel</button>
+        <button type="button" class="btn btn-secondary ml-2" @click="cancel">Cancel</button>
       </div>
     </div>
   </form>
@@ -69,6 +69,11 @@ export default {
         duedate: this.duedate,
         priority: this.priority,
       })
+    },
+
+    cancel() {
+      console.log(`masukkkk cancel`)
+      router.push({part: '/'})
     },
 
     today: ()=> {

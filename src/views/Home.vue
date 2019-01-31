@@ -1,8 +1,11 @@
 <template>
   <div class="home">
     <list-todo 
-      v-bind:todos="todos" 
+      :todos="todos"
+      :sortBy="sortBy"
       @setDone="setDone"
+      @getTodos="getTodos"
+      @setSortBy="setSortBy"
     />
   </div>
 </template>
@@ -18,7 +21,8 @@ export default {
   name: 'home',
   data: function(){
     return {
-      todos: []
+      todos: [],
+      sortBy: ''
     }
   },
 
@@ -28,8 +32,12 @@ export default {
       'errorFound',
     ]),
 
-    getTodos() {
-      APIUrl.get('tasks',{
+    setSortBy(val) {
+      this.sortBy = val
+    },
+
+    getTodos(url) {
+      APIUrl.get(url,{
         headers:{Authorization: localStorage.getItem('acc-tkn')}
       })
       .then(response => {
@@ -62,7 +70,8 @@ export default {
     if (!this.isLogin) {
       router.push({path: '/signin'})
     } else {
-      this.getTodos()
+      this.getTodos('tasks/duedates/asc')
+      this.sortBy = 'dueDateAsc'
     }
 
   },
