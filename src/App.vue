@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <nav-bar/>
-      <alert v-if="isError"/>
+      <alert 
+        v-if="isError || isSuccess" 
+      />
     </div>
     <router-view/>
   </div>
@@ -21,7 +23,7 @@ export default {
   },
 
   computed: mapState([
-    'isLogin',
+    'isSuccess',
     'isError',
 
   ])

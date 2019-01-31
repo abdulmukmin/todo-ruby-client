@@ -33,19 +33,23 @@
         <button type="button" class="btn btn-info" v-on:click="this.signup">Sign Up</button>
         <button type="button" class="btn btn-info" v-on:click="this.signin">Sign In</button>
       </div>
-      <button v-if="isLogin" type="button" class="btn btn-outline-danger">Sign out</button>
+      <button v-if="isLogin" type="button" class="btn btn-outline-danger" v-on:click="this.signOut">Sign out</button>
     </div>
   </nav>
 </template>
 
 <script>
 import router from '../router'
-import {mapState} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'NavBar',
 
   methods: {
+    ...mapActions([
+      'signOut'
+    ]),
+
     signin: ()=> {
       router.push({path: '/signin'})
     },

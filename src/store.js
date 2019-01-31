@@ -16,7 +16,7 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    doSignOut() {
+    doSignOut(state) {
       state.isLogin = false
       localStorage.clear()
     },
@@ -27,6 +27,7 @@ export default new Vuex.Store({
     },
 
     resetAlert(state) {
+      console.log(`masuk reset`)
       state.isError = false
       state.errMessage = ''
       state.isSuccess = false
@@ -46,8 +47,15 @@ export default new Vuex.Store({
   },
 
   actions: {
+    resetAlert(context) {
+      context.commit('resetAlert')
+    },
+
     signUp(context, data) {
-      if (data.email && data.password && data.password === data.password_confirmation){
+      let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+      if (validEmail.test(data.email) && data.password && data.password === data.password_confirmation){
+        context.commit('resetAlert')
         APIUrl.post('user',{
           email: data.email,
           password: data.password,
@@ -68,21 +76,24 @@ export default new Vuex.Store({
     },
 
     signIn(context, data) {
-      if (data.email && data.password){
+      context.commit('resetAlert')
+      let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+      if (validEmail.test(data.email) && data.password){
         APIUrl.post('signin',{
           email: data.email,
           password: data.password
         })
         .then( response => {
           console.log(`berhasil login`, response.data)
-          context.commit('doSignIn', response.data)
+          context.commit('doSignIn', response.data.auth_token)
+          router.push({path: '/'})
         })
         .catch( error => {
           console.log(`ini error signin`, error)
-          context.commit('showError', error)
+          context.commit('showError', error.response.data.error || 'Something wrong, call developer!')
         })
       } else {
-        context.commit('resetAlert')
         context.commit('showError', 'Please insert valid input!')
       }
     },

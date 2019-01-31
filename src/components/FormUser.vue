@@ -41,8 +41,15 @@ export default {
     ...mapActions([
       'signUp',
       'signIn',
-      'signOut'
+      'signOut',
+      'resetAlert'
     ]),
+
+    resetInput() {
+      this.email = '', 
+      this.password = '', 
+      this.password_confirmation = ''
+    },
 
     signClicked() {
       if (this.path === '/signin') {
@@ -63,9 +70,11 @@ export default {
   mounted() {
     this.path = this.$route.path
     if (this.path === '/signin') {
+      this.resetInput()
       this.btn = 'Sign In'
     } else if (this.path === '/signup') {
       this.btn = 'Save'
+      this.resetInput()
     }
   },
 
@@ -74,8 +83,10 @@ export default {
       this.path = to.path
       if (this.path === '/signin') {
         this.btn = 'Sign In'
+        this.resetInput()
       } else if (this.path === '/signup') {
         this.btn = 'Save'
+        this.resetInput()
       }
     }
   },
