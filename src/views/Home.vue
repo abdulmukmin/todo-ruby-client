@@ -18,11 +18,11 @@ export default {
     HelloWorld
   },
   
-  mounted() {
-    if (!this.isLogin) {
-      router.push({path: '/signin'})
-    }
-  },
+  // mounted() {
+  //   if (!this.isLogin) {
+  //     router.push({path: '/signin'})
+  //   }
+  // },
 
   computed: mapState([
     'isLogin'

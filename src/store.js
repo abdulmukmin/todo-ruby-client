@@ -27,7 +27,6 @@ export default new Vuex.Store({
     },
 
     resetAlert(state) {
-      console.log(`masuk reset`)
       state.isError = false
       state.errMessage = ''
       state.isSuccess = false
@@ -85,12 +84,10 @@ export default new Vuex.Store({
           password: data.password
         })
         .then( response => {
-          console.log(`berhasil login`, response.data)
           context.commit('doSignIn', response.data.auth_token)
           router.push({path: '/'})
         })
         .catch( error => {
-          console.log(`ini error signin`, error)
           context.commit('showError', error.response.data.error || 'Something wrong, call developer!')
         })
       } else {
@@ -111,6 +108,28 @@ export default new Vuex.Store({
     successFound(context, data) {
       context.commit('resetAlert')
       context.commit('showSuccessMessage', data)
-    }
+    },
+
+    saveTodo(context, data) {
+      let validateDate = new Date(data.duedate) > new Date()
+      if (data.description && validateDate && data.priority){
+        APIUrl.post('tasks',{
+          priority: data.priority,
+          description: data.description,
+          due_date: data.duedate 
+        },{
+          headers:{Authorization: localStorage.getItem('acc-tkn')}
+        })
+        .then( response => {
+          context.commit('showSuccessMessage', "Success save data!")
+          router.push({path: '/'})
+        })
+        .catch( error => {
+          context.commit('showError', error.response.data.error || 'Something wrong, call developer!')
+        })
+      } else {
+        context.commit('showError', 'Please insert valid input!')
+      }
+    },
   }
 })
