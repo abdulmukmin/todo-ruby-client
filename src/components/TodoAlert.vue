@@ -11,7 +11,7 @@
           </div>
 
           <div class="modal-body">
-            <slot name="body">
+            <slot name="body" data-spy="scroll" >
               <list-todos 
                 :todos="todayTodos"
                 @setDone="setDone"
