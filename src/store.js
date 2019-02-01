@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isLoading: false,
     isLogin: false,
 
     isError: false,
@@ -16,6 +17,14 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    doLoading(state) {
+      state.isLoading = true
+    },
+
+    stopLoading(state) {
+      state.isLoading = false
+    },
+
     doSignOut(state) {
       state.isLogin = false
       localStorage.clear()
@@ -46,11 +55,20 @@ export default new Vuex.Store({
   },
 
   actions: {
+    doLoading(context) {
+      context.commit('doLoading')
+    },
+
+    stopLoading(context) {
+      context.commit('stopLoading')
+    },
+
     resetAlert(context) {
       context.commit('resetAlert')
     },
 
     signUp(context, data) {
+      context.commit('doLoading')
       let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
       if (validEmail.test(data.email) && data.password && data.password === data.password_confirmation){
@@ -61,21 +79,22 @@ export default new Vuex.Store({
           password_confirmation: data.password_confirmation,
         })
         .then( response => {
+          context.commit('stopLoading')
           context.commit('showSuccess', 'Register successfully, please login')
           router.push({path: '/signin'})
         })
         .catch( error => {
-          console.log(`ini error signup`, error)
+          context.commit('stopLoading')
           context.commit('showError', error)
         })
       } else {
-        context.commit('resetAlert')
+        context.commit('stopLoading')
         context.commit('showError', 'Please insert valid input!')
       }
     },
 
     signIn(context, data) {
-      context.commit('resetAlert')
+      context.commit('doLoading')
       let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
       if (validEmail.test(data.email) && data.password){
@@ -84,14 +103,17 @@ export default new Vuex.Store({
           password: data.password
         })
         .then( response => {
+          context.commit('stopLoading')
           context.commit('doSignIn', response.data.auth_token)
           context.commit('showSuccess', 'Login success..')
           router.push({path: '/'})
         })
         .catch( error => {
+          context.commit('stopLoading')
           context.commit('showError', error.response.data.error || 'Something wrong, call developer!')
         })
       } else {
+        context.commit('stopLoading')
         context.commit('showError', 'Please insert valid input!')
       }
     },
@@ -112,6 +134,7 @@ export default new Vuex.Store({
     },
 
     saveTodo(context, data) {
+      context.commit('doLoading')
       let date = new Date().getDate()
       if (date < 10) date = `0${date}`
       let month = new Date().getMonth()
@@ -129,13 +152,16 @@ export default new Vuex.Store({
           headers:{Authorization: localStorage.getItem('acc-tkn')}
         })
         .then( response => {
+          context.commit('stopLoading')
           context.commit('showSuccess', "Success save data!")
           router.push({path: '/'})
         })
         .catch( error => {
+          context.commit('stopLoading')
           context.commit('showError', error.response.data.error || 'Something wrong, call developer!')
         })
       } else {
+        context.commit('stopLoading')
         context.commit('showError', 'Please insert valid input!')
       }
     },

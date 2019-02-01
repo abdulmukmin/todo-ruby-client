@@ -1,12 +1,13 @@
 <template>
   <form>
+    <h1>{{page}}</h1>
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
       <input type="email" v-model="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">Password</label>
-      <input type="password" v-model="password" class="form-control" placeholder="Password">
+      <input type="password" v-model="password" class="form-control" placeholder="Password" width="10">
     </div>
     <div class="form-group" v-if="path === '/signup' ">
       <label for="exampleInputPassword1">Password Confirmation</label>
@@ -33,7 +34,8 @@ export default {
       password_confirmation: '',
 
       path: '',
-      btn: ''
+      btn: '',
+      page: ''
     }
   },
 
@@ -72,7 +74,9 @@ export default {
     if (this.path === '/signin') {
       this.resetInput()
       this.btn = 'Sign In'
+      this.page = 'Sign In'
     } else if (this.path === '/signup') {
+      this.page = 'Register'
       this.btn = 'Save'
       this.resetInput()
     }
@@ -82,9 +86,11 @@ export default {
     '$route' (to, from) {
       this.path = to.path
       if (this.path === '/signin') {
+        this.page = 'Sign In'
         this.btn = 'Sign In'
         this.resetInput()
       } else if (this.path === '/signup') {
+        this.page = 'Register'
         this.btn = 'Save'
         this.resetInput()
       }

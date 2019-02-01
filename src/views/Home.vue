@@ -43,7 +43,7 @@ export default {
 
   components: {
     ListTodo,
-    TodoAlert
+    TodoAlert,
   },
 
   watch: {
@@ -58,6 +58,8 @@ export default {
     ...mapActions([
       'successFound',
       'errorFound',
+      'doLoading',
+      'stopLoading'
     ]),
 
     reset() {
@@ -72,6 +74,7 @@ export default {
     },
 
     getTodos(url) {
+      this.doLoading()
       APIUrl.get(url,{
         headers:{Authorization: localStorage.getItem('acc-tkn')}
       })
@@ -91,21 +94,26 @@ export default {
           if (allTodos[i].status === 'not done') this.notDoneTodos.push(allTodos[i])
         }
         this.todos = response.data
+        this.stopLoading()
       })
       .catch(error=> {
+        this.stopLoading()
         this.errorFound(error.response.data)
       })
     },
 
     setDone(id) {
+      this.doLoading()
       APIUrl.patch(`tasks/changestatus/${id}`,{},{
         headers:{Authorization: localStorage.getItem('acc-tkn')}
       })
       .then(response=> {
+        this.stopLoading()
         this.getTodos('tasks/duedates/asc')
         this.successFound('Success set done todo')
       })
       .catch(error=> {
+        this.stopLoading()
         this.errorFound(error.response.data)
       })
     }

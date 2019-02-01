@@ -21,22 +21,22 @@
 import NavBar from './components/NavBar.vue'
 import SideBar from './components/SideBar.vue'
 import Alert from './components/Alert.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name:'App',
   components: {
     NavBar,
     Alert,
-    SideBar,
+    SideBar
   },
 
   computed: mapState([
     'isSuccess',
     'isError',
 
-  ])
-  
+  ]),
+
 }
 </script>
 
